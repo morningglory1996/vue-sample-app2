@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import axios from "../axios-auth";
 import axiosRefresh from "../axios-refresh";
 import router from "../router";
+import config from "../../config";
 
 Vue.use(Vuex);
 
@@ -38,14 +39,11 @@ export default new Vuex.Store({
     },
     login({ dispatch }, authData) {
       axios
-        .post(
-          "/accounts:signInWithPassword?key=AIzaSyB6ADugtBYpb5w8kzGFJulmJYZM7eLABIs",
-          {
-            email: authData.email,
-            password: authData.password,
-            returnSecureToken: true,
-          }
-        )
+        .post("/accounts:signInWithPassword?key=" + config.key, {
+          email: authData.email,
+          password: authData.password,
+          returnSecureToken: true,
+        })
         .then((response) => {
           dispatch("setAuthdata", {
             idToken: response.data.idToken,
@@ -64,7 +62,7 @@ export default new Vuex.Store({
     },
     async refreshIdToken({ dispatch }, refreshToken) {
       await axiosRefresh
-        .post("/token?key=AIzaSyB6ADugtBYpb5w8kzGFJulmJYZM7eLABIs", {
+        .post("/token?key=" + config.key, {
           grant_type: "refresh_token",
           refresh_token: refreshToken,
         })
@@ -78,7 +76,7 @@ export default new Vuex.Store({
     },
     register({ dispatch }, authData) {
       axios
-        .post("/accounts:signUp?key=AIzaSyB6ADugtBYpb5w8kzGFJulmJYZM7eLABIs", {
+        .post("/accounts:signUp?key=" + config.key, {
           email: authData.email,
           password: authData.password,
           returnSecureToken: true,
